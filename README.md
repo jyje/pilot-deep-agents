@@ -39,11 +39,28 @@ cp .env.example .env
 | `OPENAI_API_KEY` | ✅ | API key |
 | `OPENAI_API_BASE` | | OpenAI-compatible endpoint URL (omit to use OpenAI official API) |
 | `OPENAI_MODEL` | | Model name (default with base: gpt-4o) |
+| `OPENAI_MINIMAL` | | Set to `1` for small-context models (e.g. 4096 tokens); uses no tools |
 
 ## Run
 
 ```bash
 uv run python main.py
+```
+
+### Example output
+
+The script asks the agent a composite question (weather + current time). Tool calls and their responses are printed, then the final answer.
+
+```
+User: What's the weather in Seoul and what time is it now?
+
+--- Tool calls and responses ---
+  [Tool call] get_weather({'city': 'Seoul'})
+  [Tool call] get_current_time({})
+  [Tool response] Weather in Seoul: sunny, 22°C
+  [Tool response] 2026-02-11 21:50:50 UTC
+
+Agent response: The weather in Seoul is sunny with a temperature of 22°C. The current time in UTC is 2026-02-11 21:50:50.
 ```
 
 ## Lint / format (dev)
@@ -59,7 +76,7 @@ uv run ty check .
 - **deepagents** `create_deep_agent()`: built-in todo list (write_todos), filesystem (read_file/write_file), subagents
 - **langchain-openai** `ChatOpenAI`: OpenAI-compatible API (base_url supported)
 - **python-dotenv**: loads `.env`
-- Custom tool `get_weather` to extend the agent
+- Custom tools `get_weather` and `get_current_time`; tool calls and responses are printed
 
 ## References
 
